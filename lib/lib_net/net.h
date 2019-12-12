@@ -13,11 +13,12 @@
 #include <arpa/inet.h>
 #include <sys/epoll.h>
 
+#include <errno.h>
 #include <assert.h>
 
 
 
-#define OUTSTANDING_LISTENQ 10
+#define OUTSTANDING_LISTENQ 5
 #define MAX_EVENTS 100
 #define BUF_SIZE 1<<30
 
