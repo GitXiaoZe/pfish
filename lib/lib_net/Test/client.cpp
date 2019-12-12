@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <string.h>
@@ -19,7 +21,7 @@ int main(int argc, char **argv){
     }
 
     struct sockaddr_in server_addr;
-    memser(&server_addr, 0, sizeof(server_addr));
+    memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr = SERVER_IP;
     server_addr.sin_port = SERVER_PORT;

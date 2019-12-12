@@ -1,6 +1,7 @@
 #ifndef NET_H
 #define NET_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
