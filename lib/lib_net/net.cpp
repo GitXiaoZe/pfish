@@ -65,7 +65,7 @@ void netServer::start(){
                     exit(-1);
                 }
                 //may need to set edge-trigger
-                accept_event.events = EPOLLIN;
+                accept_event.events = EPOLLIN | EPOLLET;
                 accept_event.data.fd = conn_sock;
                 if( epoll_ctl(listen_epoll_fd, EPOLL_CTL_ADD, conn_sock, &accept_event) < 0 ){
                     printf("netServer running ERROR : adding new connection;\n");
