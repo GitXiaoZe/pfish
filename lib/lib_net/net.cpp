@@ -12,19 +12,19 @@ void netServer::initialize(){
         exit(-1);
     }
     int optval = 1;
-    if( setsocket(listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, 
-            (const void*)&oprval, sizeof(optval)) < 0 ){
-        printf("netServer initialization ERROR : set SO_REUSEADDR;")
+    if( setsockopt(listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, 
+            (const void*)&optval, sizeof(optval)) < 0 ){
+        printf("netServer initialization ERROR : set SO_REUSEADDR;");
         exit(-1);
     }
 
-    if( bind(listen_socket_fd, (struct sockaddr_in *)&serveraddr, sizeof(serveraddr) < 0 ){
-        printf("netServer initialization ERROR : bind socket;")
+    if( bind(listen_socket_fd, (struct sockaddr*)&serveraddr, sizeof(serveraddr)) < 0 ){
+        printf("netServer initialization ERROR : bind socket;");
         exit(-1);
     }
 
     if( listen(listen_socket_fd, OUTSTANDING_LISTENQ) < 0){
-        printf("netServer initalization ERROR : mark a connection-mode socket;")
+        printf("netServer initalization ERROR : mark a connection-mode socket;");
         exit(-1);
     }
 
@@ -59,7 +59,7 @@ void netServer::start(){
             if( waiting_events[i].data.fd == listen_socket_fd ){
                 struct sockaddr client_addr;
                 int addr_len;
-                int conn_sock = accept(listen_socket_fd, &client_addr, &addr_len);
+                int conn_sock = accept(listen_socket_fd, &client_addr, (socklen_t*)&addr_len);
                 if( conn_sock < 0){
                     printf("netServer running ERROR : accepting connection");
                     exit(-1);
@@ -75,7 +75,10 @@ void netServer::start(){
                 }
             } else { // need to process data 
                 char *buf = (char*)malloc(BUF_SIZE);
-                while( read(waiting_events[i].data.fd, buf, BUF_SIZE) > 0);
+                int size = 0;
+                while( (size = read(waiting_events[i].data.fd, buf, BUF_SIZE)) > 0){
+                    printf("Receive %d bytes\n", (size>>30));
+                }
             }
         }
     }

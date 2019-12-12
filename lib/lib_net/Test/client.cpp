@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <string.h>
 
 #define BUF_SIZE 1<<30
@@ -23,10 +26,10 @@ int main(int argc, char **argv){
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr = SERVER_IP;
-    server_addr.sin_port = SERVER_PORT;
+    server_addr.sin_addr.s_addr = htonl(SERVER_IP);
+    server_addr.sin_port = htons(SERVER_PORT);
 
-    if( connect(client_fd, (struct sockaddr*)server_addr, sizeof(server_addr)) < 0 ){
+    if( connect(client_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0 ){
         printf("connect to server FAIL");
         exit(-1);
     }
