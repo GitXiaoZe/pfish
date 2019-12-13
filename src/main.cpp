@@ -1,6 +1,7 @@
-#include <iostream>
+#include "../lib/master/Master.h"
+
 
 int main(int argc, char *argv[]) {
-	std::cout << "Hello Easy C++ project!" << std::endl;
+	Master *master = new Master();
 	return 0;
 }

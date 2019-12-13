@@ -23,7 +23,9 @@
 class Socket{
     public:
         Socket(unsigned int sockets_id_) 
-            : socket_id(sockets_id_){}
+            : socket_id(sockets_id_){
+                cpu_ids = std::make_shared< std::vector<int> >();
+            }
         unsigned int socket_id;
         std::shared_ptr< std::vector<int> > cpu_ids;
 };
@@ -33,7 +35,7 @@ class Core{
         pthread_t thread_id;
         unsigned core_id;
         unsigned socket_id;
-        //This variable indicate that the core's role : runing task, or sending data;
+        //This variable indicate that the core's role : runing task, or sending data(RPC message, shuffle);
         unsigned role; 
 };
 
