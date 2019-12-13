@@ -31,11 +31,12 @@ void Executor::initialize(){
         path_length += 7; 
         path[path_length] = '\0'; // path = "/sys/devices/system/node/nodeX/cpulist"
 
+        printf("Executor::initialize path = %s\n", path);
         assert(cpu_infos->find(i) == cpu_infos->end());
-        
+        printf("assert finish \n");
         std::shared_ptr<Socket> sock = std::make_shared<Socket>(i);
         cpu_infos->insert( std::pair<int, std::shared_ptr<Socket> >(i, sock) );
-
+        printf("insert finish\n");
         FILE *fd = fopen(path, "r");
         if(fd == NULL){
             printf("Open file %s ERROR\n", path);
@@ -47,9 +48,11 @@ void Executor::initialize(){
         bool tail = false;
         for(pre_ptr = 0; buffer[pre_ptr] != '\0'; pre_ptr = post_ptr + 1){
             for(post_ptr = pre_ptr + 1; buffer[post_ptr] != '\0' && buffer[post_ptr] != ','; post_ptr++);
+            printf("pre_ptr = %d, post_ptr=%d\n", pre_ptr, post_ptr);
             if( buffer[post_ptr] == '\0' ) tail = true;
             else buffer[post_ptr] = '\0';
             sock->cpu_ids->push_back(atoi(buffer + pre_ptr));
+            printf("cpu num - %d\n", atoi(buffer + pre_ptr));
             if(tail) break;
         }
         available_cores_per_socket[i] = (unsigned int)(sock->cpu_ids->size());
