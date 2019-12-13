@@ -1,12 +1,12 @@
 #include "net.h"
 
-netServer::netServer(unsigned short port_)
+NetServer::NetServer(unsigned short port_)
      : port(port_){
     serveraddr.sin_family = AF_INET;
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
     serveraddr.sin_port = htons(port_);
 }
-void netServer::initialize(){
+void NetServer::initialize(){
     if( (listen_socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ){
         printf("netServer initialization ERROR : listen_socket_fd initialization;\n");
         exit(-1);
@@ -43,7 +43,7 @@ void netServer::initialize(){
     }
 }
 
-void netServer::start(){
+void NetServer::start(){
     int active_fds;
     struct epoll_event waiting_events[MAX_EVENTS];
     struct epoll_event accept_event;
@@ -64,8 +64,8 @@ void netServer::start(){
                     printf("netServer running ERROR : accepting connection;\n");
                     exit(-1);
                 }
-                //may need to set edge-trigger
-                accept_event.events = EPOLLIN | EPOLLET;
+                //may need to set edge-trigger 
+                accept_event.events = EPOLLIN;
                 accept_event.data.fd = conn_sock;
                 if( epoll_ctl(listen_epoll_fd, EPOLL_CTL_ADD, conn_sock, &accept_event) < 0 ){
                     printf("netServer running ERROR : adding new connection;\n");
@@ -74,11 +74,7 @@ void netServer::start(){
                     printf("Accept a new connection;\n");
                 }
             } else { // need to process data 
-                char *buf = (char*)malloc(BUF_SIZE);
-                int size = 0;
-                while( (size = read(waiting_events[i].data.fd, buf, BUF_SIZE)) > 0){
-                    printf("Receive %d bytes\n", size);
-                }
+
             }
         }
     }

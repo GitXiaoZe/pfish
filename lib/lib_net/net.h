@@ -22,9 +22,9 @@
 #define MAX_EVENTS 100
 #define BUF_SIZE 1<<30
 
-class netServer{
+class NetServer{
     public :
-        netServer(unsigned short port_);
+        NetServer(unsigned short port_);
         void initialize();
         void start();
         
